@@ -118,4 +118,5 @@ Players switch roles each turn, meaning they act as the Attacking Player in one 
 
 # Want to contribute ?
 
-[Guide for commits](./doc/git-templates.MD)
+- [Guide for commits](./doc/git-templates.MD)
+- [Micro-MVP 001](./doc/mmvp01.MD)
