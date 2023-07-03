@@ -39,7 +39,7 @@ Example:
 #### Image
 
 <figure>
-      <img src="./doc%5Cimg/card-example01.png" width="100px"/>
+      <img src="./doc/img/card-example01.png" width="100px"/>
       <figcaption>
             Illustrative image to assist in the customization/identification of the cards
       </figcaption>
