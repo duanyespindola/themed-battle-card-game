@@ -58,9 +58,12 @@ func TestNewServer(t *testing.T) {
 	}
 
 	//start the server
-	server := NewServer( fmt.Sprintf("%d", port) )
-	if server.Addr != fmt.Sprintf(":%d", port) {
-		t.Errorf("server address is wrong: got %v want %v", server.Addr, ":8080")
+	addr := fmt.Sprintf(":%d", port)
+	server := NewServer( addr[1:] ) //remove the ":" from the address
+	
+	
+	if server.Addrs[0] != addr {
+		t.Errorf("server address is wrong: got %v want %v", server.Addrs[0], addr)
 	}
 
 	if server.Handler == nil {

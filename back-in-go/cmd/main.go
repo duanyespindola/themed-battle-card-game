@@ -13,6 +13,7 @@ func main() {
     	log.Fatal("Error loading .env file")
   	}
 	s := server.NewServer(config["PORT"])
-	s.ListenAndServe()
-	defer s.Close()
+	s.Start()
+	defer s.Stop()
+	s.Wait()
 }
