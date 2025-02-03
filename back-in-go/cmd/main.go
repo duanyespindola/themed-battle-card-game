@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	server "github.com/duanyespindola/themed-battle-card-game/internal/hello-world-server"
+	server "github.com/duanyespindola/themed-battle-card-game/internal/hello-server"
 	"github.com/joho/godotenv"
 )
 

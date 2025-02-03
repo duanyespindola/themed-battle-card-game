@@ -1,14 +1,12 @@
-package server
+package hello_server
 
 import (
 	"fmt"
-	"net"
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"testing"
 
-	"github.com/joho/godotenv"
+	utils_net "github.com/duanyespindola/themed-battle-card-game/internal/utils"
 )
 
 func TestHelloWorldHandler(t *testing.T) {
@@ -33,26 +31,9 @@ func TestHelloWorldHandler(t *testing.T) {
 }
 
 func TestNewServer(t *testing.T) {
-	//read the .env file
-	config, err := godotenv.Read("../../.env")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	//check if the PORT is setted 
-	start_port := config["PORT"]
-	if start_port == "" {
-		start_port = "8080"
-	}
-
-	//convert the PORT to int
-	port, err := strconv.Atoi(start_port)
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	//find the next available port
-	port, err = FindNextOpenPort(port)
+	port, err := utils_net.FindNextOpenPort(8080)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,22 +50,4 @@ func TestNewServer(t *testing.T) {
 	if server.Handler == nil {
 		t.Error("server handler is nil")
 	}
-}
-func TestFindNextOpenPort(t *testing.T) {
-	startPort := 8080
-	port, err := FindNextOpenPort(startPort)
-	if err != nil {
-		t.Fatalf("Expected to find an open port, but got error: %v", err)
-	}
-
-	if port < startPort  {
-		t.Errorf("Found port %d is lesse than startPort %d", port, startPort)
-	}
-
-	// Try to listen on the found port to ensure it's actually open
-	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
-	if err != nil {
-		t.Fatalf("Expected port %d to be open, but got error: %v", port, err)
-	}
-	ln.Close()
 }
