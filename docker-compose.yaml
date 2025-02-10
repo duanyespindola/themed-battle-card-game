@@ -1,0 +1,11 @@
+services:
+  front-in-quasar:
+    build: 
+      dockerfile: ./front-in-quasar/Dockerfile.dev
+    restart: unless-stopped
+    volumes:
+      - ./front-in-quasar:/usr/app
+    command: "/bin/bash"
+    ports:
+      - 9000:9000
+    tty: true
