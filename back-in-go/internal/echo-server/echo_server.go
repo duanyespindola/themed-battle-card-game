@@ -15,6 +15,9 @@ var (
 
 func newUpgrader() *websocket.Upgrader {
 	u := websocket.NewUpgrader()
+	u.CheckOrigin = func(r *http.Request) bool {
+		return true
+	}
 	u.OnMessage(func(c *websocket.Conn, messageType websocket.MessageType, data []byte) {
 		
 		var b bytes.Buffer
