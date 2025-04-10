@@ -1,0 +1,26 @@
+# Themed Card Battle Game
+> _by Duany Espíndola_
+
+## Summary
+
+This will be an online, turn-based card game where the goal is to bring your opponent’s life points down to zero.
+
+I’m using this project as a way to learn new technologies, like Go for the backend.
+
+For the frontend, I’d like to use Flutter, but I've never used that tech before. 
+
+So, to get things up and running, I’ll start with Vue.js for a simple MVP (with a very basic design) just to make sure everything works. Once that’s in place, I’ll migrate to Flutter.
+
+## Documentation
+
+- [Project Requirements](./docs/project-requirements-document.md)
+
+
+## Learning Goals
+
+- Dev and production enviroment using containers.
+- Coding with BDD/TDD.
+- Use microservices
+- Automated CI/CD
+
+_Look, I won't be able to follow all of this immediately. The plan is to tweak the project as I learn more and more about these things._
