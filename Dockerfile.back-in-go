@@ -1,0 +1,4 @@
+FROM golang:1.24
+
+WORKDIR /usr/app
+# RUN go mod download

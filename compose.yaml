@@ -1,0 +1,12 @@
+services:
+  back-in-go:
+    build: 
+      context: .
+      dockerfile: Dockerfile.back-in-go
+    restart: unless-stopped
+    volumes:
+      - ./back-in-go:/usr/app
+    command: "/bin/bash"
+    ports:
+      - 8080:8080
+    tty: true
