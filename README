@@ -24,3 +24,6 @@ So, to get things up and running, I’ll start with Vue.js for a simple MVP (wit
 - Automated CI/CD
 
 _Look, I won't be able to follow all of this immediately. The plan is to tweak the project as I learn more and more about these things._
+
+### Sources 
+- The best source to learn go and testing with go, for me at least, is the site https://quii.gitbook.io/learn-go-with-tests
