@@ -3,6 +3,7 @@ module github.com/duanyespindola/themed-battle-card-game/back-in-go
 go 1.24.2
 
 require (
+	github.com/brianvoe/gofakeit/v7 v7.2.1 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect

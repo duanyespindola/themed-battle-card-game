@@ -1,21 +1,23 @@
 package player
 
 import (
-	"math/rand"
+	"strings"
+
+	"github.com/brianvoe/gofakeit/v7"
 )
 
 type Player struct {
-	Nickname string
+	Nickname string;
+	Id string
 }
 
 func NewPlayer() *Player {
 	return &Player{
-		Nickname: generateRandomNickname(),
+		Id: gofakeit.UUID(),
+		Nickname: generateFakeNickname(),
 	}
 }
 
-func generateRandomNickname() string {
-	adjectives := []string{"Swift", "Brave", "Clever", "Mighty"}
-	nouns := []string{"Tiger", "Eagle", "Shark", "Wolf"}
-	return adjectives[rand.Intn(len(adjectives))] + nouns[rand.Intn(len(nouns))]
+func generateFakeNickname() string {
+	return strings.ToLower(gofakeit.Adjective() + "_" + gofakeit.Noun())
 }
