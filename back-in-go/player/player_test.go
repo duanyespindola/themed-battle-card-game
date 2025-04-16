@@ -9,18 +9,19 @@ import (
 
 var _ = Describe("Player Unit Test", func() {
 	var player1 *player.Player
-	var player2 *player.Player
 
 	BeforeEach(func() {
 		player1 = player.NewPlayer()
-		player2 = player.NewPlayer()
 	})
 
 	Context("Contructor", func() {
-		It("should create a new player with a random nickname", func() {
-			Expect(player1.Nickname).ToNot(BeEmpty())
-			Expect(player2.Nickname).ToNot(BeEmpty())
+		It("should have an id of type UUID", func() {
+			Expect(player1.Id).To(HaveLen(36))
 		})
+		It("should a random nickname", func() {
+			Expect(player1.Nickname).ToNot(BeEmpty())
+		})
+
 	})
 
 })
