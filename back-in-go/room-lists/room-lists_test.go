@@ -23,7 +23,11 @@ var _ = Describe("RoomLists Unit Test", Ordered, func() {
 			Id:       "C345678",
 			Nickname: "Player3",
 		}
-		var room1, room2, room3 *room.Room
+		player4 := player.Player{
+			Id:       "D901234",
+			Nickname: "Player4",
+		}
+		var room1, room2, room3, room4 *room.Room
 		var err error
 
 		When("the first player joins the game", func() {
@@ -68,14 +72,34 @@ var _ = Describe("RoomLists Unit Test", Ordered, func() {
 				BeforeAll(func() {
 					Expect(room1.Status()).To(Equal(room.StatusWaitingMatch))
 					room1, err = roomLists.DealocateThePlayer(&player1)
+					Expect(room1).To(Equal(room2))
 					Expect(err).To(BeNil())
 				})
 				It("should put the room back to waiting for another player", func() {
 					Expect(room1.Status()).To(Equal(room.StatusWaitingPlayer))
+					Expect(room2.Status()).To(Equal(room.StatusWaitingPlayer))
 				})
 				It("should have only the player 2 in the room", func() {
 					Expect(room1.Players()).To(HaveLen(1))
 					Expect(*room1.Players()[0]).To(Equal(player2))
+				})
+			})
+		})
+		Context("Given that there are two rooms waiting for another player", func() {
+			It("should have two rooms wainting for players", func() {
+				Expect(room2.Status()).To(Equal(room.StatusWaitingPlayer))
+				Expect(room3.Status()).To(Equal(room.StatusWaitingPlayer))
+				Expect(room2).NotTo(Equal(room3))
+			})
+			When("the fourth player joins the game", func() {
+				BeforeAll(func() {
+					room4 = roomLists.AlocateThePlayer(&player4)
+				})
+				It("should put the player in the oldest room waiting for another player", func() {
+					//TODO: in 2025-04-018 it will bring any waiting room, not the oldest
+					remainging_rooms := []*room.Room{room2, room3}
+					Expect(remainging_rooms).To(ContainElement(room4))
+					Expect(*room4.Players()[1]).To(Equal(player4))
 				})
 			})
 		})
