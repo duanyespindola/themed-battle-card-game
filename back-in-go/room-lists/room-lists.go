@@ -10,33 +10,51 @@ package roomLists
 
 import (
 	"github.com/duanyespindola/themed-battle-card-game/back-in-go/player"
-	waitingRoom "github.com/duanyespindola/themed-battle-card-game/back-in-go/waiting-room"
+	"github.com/duanyespindola/themed-battle-card-game/back-in-go/room"
 )
 
-type RoomList struct {
-	byStatus map[waitingRoom.Status][]*waitingRoom.WaitingRoom
+var byStatus = TListByStatus{
+	room.StatusWaitingPlayer: make(TListByRoomId),
+	room.StatusWaitingMatch:  make(TListByRoomId),
 }
 
-var roomList = RoomList{
-	byStatus: make(map[waitingRoom.Status][]*waitingRoom.WaitingRoom),
-}
-
-func thereIsAnyWaitingForAnotherPlayer() *waitingRoom.WaitingRoom {
-	waitingRooms := roomList.byStatus[waitingRoom.WaitingForAnotherPlayerStatus]
+func isThereAnyWaitingForPlayer() *room.Room {
+	waitingRooms := byStatus[room.StatusWaitingPlayer]
 	if len(waitingRooms) > 0 {
-		return waitingRooms[0]
+		wainting_room := getOne(waitingRooms)
+		return wainting_room
 	}
 	return nil
 }
 
-func AlocateThePlayer(p *player.Player) *waitingRoom.WaitingRoom {
-	room := thereIsAnyWaitingForAnotherPlayer()
-	if room != nil {
-		roomList.byStatus[waitingRoom.WaitingForAnotherPlayerStatus] = roomList.byStatus[waitingRoom.WaitingForAnotherPlayerStatus][1:]
-		_ = room.AddPlayer(p)
-		return room
+func AlocateThePlayer(p *player.Player) *room.Room {
+	waiting_room := isThereAnyWaitingForPlayer()
+	if waiting_room != nil {
+		delete(byStatus[room.StatusWaitingPlayer], waiting_room.Id())
+		_ = waiting_room.AddPlayer(p)
+	} else {
+		waiting_room = room.NewRoom(p)
 	}
-	room = waitingRoom.NewWaitingRoom(p)
-	roomList.byStatus[waitingRoom.WaitingForAnotherPlayerStatus] = append(roomList.byStatus[waitingRoom.WaitingForAnotherPlayerStatus], room)
-	return room
+	updateLists(waiting_room)
+	return waiting_room
+}
+
+// TODO: Try to find a more elegant way to do this
+func updateLists(r *room.Room) {
+	list := byStatus[r.Status()]
+	list[r.Id()] = r
+}
+
+/**
+* maps are unordered, which means we cannot rely on any particular order of elements
+* if later we see that a given room is waiting to much and we decide the need of a consistent
+* order, whe should consider using a slice to store keys in order or use a struct that
+* keeps track of insertion order manually.
+* But, for now, any room in the same state do the trick
+**/
+func getOne(m TListByRoomId) *room.Room {
+	for _, value := range m {
+		return value
+	}
+	return nil
 }

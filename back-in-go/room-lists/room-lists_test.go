@@ -5,8 +5,8 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/duanyespindola/themed-battle-card-game/back-in-go/player"
+	"github.com/duanyespindola/themed-battle-card-game/back-in-go/room"
 	roomLists "github.com/duanyespindola/themed-battle-card-game/back-in-go/room-lists"
-	waitingRoom "github.com/duanyespindola/themed-battle-card-game/back-in-go/waiting-room"
 )
 
 var _ = Describe("RoomLists Unit Test", Ordered, func() {
@@ -23,25 +23,23 @@ var _ = Describe("RoomLists Unit Test", Ordered, func() {
 		// 		Id:       "C345678",
 		// 		Nickname: "Player3",
 		// }
-		var room1 *waitingRoom.WaitingRoom
-
+		var room1 *room.Room
 		When("Asked to find a room for the first player,", func() {
-			room := roomLists.AlocateThePlayer(&player1)
 			It("Should return a room with status 'Waiting For Another Player'", func() {
-				Expect(room.Status()).To(Equal(waitingRoom.WaitingForAnotherPlayerStatus))
-				Expect(room.Players()).To(HaveLen(1))
-				Expect(*room.Players()[0]).To(Equal(player1))
+				room1 = roomLists.AlocateThePlayer(&player1)
+				Expect(room1.Status()).To(Equal(room.StatusWaitingPlayer))
+				Expect(room1.Players()).To(HaveLen(1))
+				Expect(*room1.Players()[0]).To(Equal(player1))
 			})
-			room1 = room
 		})
 		When("Asked to find a room for the second player,", func() {
-			room := roomLists.AlocateThePlayer(&player2)
 			It("Should return the same room of the first player with status 'Waiting For Match To Start'", func() {
-				Expect(room).To(Equal(room1))
-				Expect(room.Status()).To(Equal(waitingRoom.WaitingForMatchToStartStatus))
-				Expect(room.Players()).To(HaveLen(2))
-				Expect(*room.Players()[0]).To(Equal(player1))
-				Expect(*room.Players()[1]).To(Equal(player2))
+				room2 := roomLists.AlocateThePlayer(&player2)
+				Expect(room2).To(Equal(room1))
+				Expect(room2.Status()).To(Equal(room.StatusWaitingMatch))
+				Expect(room2.Players()).To(HaveLen(2))
+				Expect(*room2.Players()[0]).To(Equal(player1))
+				Expect(*room2.Players()[1]).To(Equal(player2))
 			})
 		})
 	})
