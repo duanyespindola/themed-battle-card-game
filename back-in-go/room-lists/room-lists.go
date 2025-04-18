@@ -30,19 +30,22 @@ func isThereAnyWaitingForPlayer() *room.Room {
 func AlocateThePlayer(p *player.Player) *room.Room {
 	waiting_room := isThereAnyWaitingForPlayer()
 	if waiting_room != nil {
-		delete(byStatus[room.StatusWaitingPlayer], waiting_room.Id())
+		removeFromAllLists(waiting_room)
 		_ = waiting_room.AddPlayer(p)
 	} else {
 		waiting_room = room.NewRoom(p)
 	}
-	updateLists(waiting_room)
+	insertOnLists(waiting_room)
 	return waiting_room
 }
 
 // TODO: Try to find a more elegant way to do this
-func updateLists(r *room.Room) {
-	list := byStatus[r.Status()]
-	list[r.Id()] = r
+func removeFromAllLists(r *room.Room) {
+	delete(byStatus[r.Status()], r.Id())
+}
+
+func insertOnLists(r *room.Room) {
+	byStatus[r.Status()][r.Id()] = r
 }
 
 /**
