@@ -17,15 +17,7 @@ var byStatus = TListByStatus{
 	room.StatusWaitingPlayer: make(TListByRoomId),
 	room.StatusWaitingMatch:  make(TListByRoomId),
 }
-
-func isThereAnyWaitingForPlayer() *room.Room {
-	waitingRooms := byStatus[room.StatusWaitingPlayer]
-	if len(waitingRooms) > 0 {
-		wainting_room := getOne(waitingRooms)
-		return wainting_room
-	}
-	return nil
-}
+var byPlayerId = make(TListByPlayerId)
 
 func AlocateThePlayer(p *player.Player) *room.Room {
 	waiting_room := isThereAnyWaitingForPlayer()
@@ -39,13 +31,47 @@ func AlocateThePlayer(p *player.Player) *room.Room {
 	return waiting_room
 }
 
-// TODO: Try to find a more elegant way to do this
+func DealocateThePlayer(p *player.Player) (*room.Room, error) {
+	waiting_room, ok := byPlayerId[p.Id]
+	if !ok {
+		return nil, ErrorRoomNotFound
+	}
+
+	_, err := waiting_room.RemovePlayer(p)
+	if err != nil {
+		return waiting_room, ErrorPlayerNotInRoom
+	}
+
+	return waiting_room, nil
+}
+
+func isThereAnyWaitingForPlayer() *room.Room {
+	waitingRooms := byStatus[room.StatusWaitingPlayer]
+	if len(waitingRooms) > 0 {
+		wainting_room := getOne(waitingRooms)
+		return wainting_room
+	}
+	return nil
+}
+
 func removeFromAllLists(r *room.Room) {
+	//remove from byStatus
 	delete(byStatus[r.Status()], r.Id())
+
+	//remove from byPlayerId
+	for _, p := range r.Players() {
+		delete(byPlayerId, p.Id)
+	}
 }
 
 func insertOnLists(r *room.Room) {
+	//update list byStatus
 	byStatus[r.Status()][r.Id()] = r
+
+	//update list byPlayerId
+	for _, p := range r.Players() {
+		byPlayerId[p.Id] = r
+	}
 }
 
 /**
