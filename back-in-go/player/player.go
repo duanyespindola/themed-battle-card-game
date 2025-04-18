@@ -7,17 +7,18 @@ import (
 )
 
 type Player struct {
-	Nickname string;
-	Id string
+	Id       TPlayerId
+	Nickname TPlayerNickname
 }
 
 func NewPlayer() *Player {
 	return &Player{
-		Id: gofakeit.UUID(),
+		Id:       TPlayerId(gofakeit.UUID()),
 		Nickname: generateFakeNickname(),
 	}
 }
 
-func generateFakeNickname() string {
-	return strings.ToLower(gofakeit.Adjective() + "_" + gofakeit.Noun())
+func generateFakeNickname() TPlayerNickname {
+	nickname := strings.ToLower(gofakeit.Adjective() + "_" + gofakeit.Noun())
+	return TPlayerNickname(nickname)
 }
