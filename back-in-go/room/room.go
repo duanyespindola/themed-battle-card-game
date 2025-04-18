@@ -1,4 +1,4 @@
-package waitingRoom
+package room
 
 import (
 	"fmt"
@@ -7,35 +7,35 @@ import (
 	"github.com/duanyespindola/themed-battle-card-game/back-in-go/player"
 )
 
-type WaitingRoom struct {
-	id      string
-	status  Status
-	players []*player.Player
+type Room struct {
+	id      TRoomId
+	status  TRoomStatus
+	players TRoomPlayers
 }
 
-func (w *WaitingRoom) Id() string {
-	return w.id
+func (w *Room) Id() TRoomId {
+	return TRoomId(w.id)
 }
-func (w *WaitingRoom) Status() Status {
-	return w.status
+func (w *Room) Status() TRoomStatus {
+	return TRoomStatus(w.status)
 }
-func (w *WaitingRoom) Players() []*player.Player {
-	return w.players
+func (w *Room) Players() TRoomPlayers {
+	return TRoomPlayers(w.players)
 }
-func (w *WaitingRoom) AddPlayer(p *player.Player) error {
+func (w *Room) AddPlayer(p *player.Player) error {
 	if w.playerInTheRoom(p) {
 		return fmt.Errorf("player already in the room")
 	}
-	if w.status != WaitingForAnotherPlayerStatus {
+	if w.status != StatusWaitingPlayer {
 		return fmt.Errorf("room status does not allow adding players")
 	}
 
-	w.status = WaitingForMatchToStartStatus
+	w.status = StatusWaitingMatch
 	w.players = append(w.players, p)
 	return nil
 }
 
-func (w *WaitingRoom) playerInTheRoom(p *player.Player) bool {
+func (w *Room) playerInTheRoom(p *player.Player) bool {
 	exists := false
 	//checando se é o player 1
 	if len(w.players) > 0 {
@@ -48,15 +48,15 @@ func (w *WaitingRoom) playerInTheRoom(p *player.Player) bool {
 	return exists
 }
 
-func NewWaitingRoom(p *player.Player) *WaitingRoom {
-	return &WaitingRoom{
-		id:      gofakeit.UUID(),
-		status:  WaitingForAnotherPlayerStatus,
+func NewRoom(p *player.Player) *Room {
+	return &Room{
+		id:      TRoomId(gofakeit.UUID()),
+		status:  StatusWaitingPlayer,
 		players: []*player.Player{p},
 	}
 }
 
-func (room *WaitingRoom) RemovePlayer(player_to_remove *player.Player) (*player.Player, error) {
+func (room *Room) RemovePlayer(player_to_remove *player.Player) (*player.Player, error) {
 	if !room.playerInTheRoom(player_to_remove) {
 		return nil, fmt.Errorf("player not found in the room")
 	}
@@ -71,7 +71,7 @@ func (room *WaitingRoom) RemovePlayer(player_to_remove *player.Player) (*player.
 	removed_player := room.players[idx]
 	room.players = append(room.players[:idx], room.players[idx+1:]...)
 
-	room.status = WaitingForAnotherPlayerStatus
+	room.status = StatusWaitingPlayer
 
 	return removed_player, nil
 }
