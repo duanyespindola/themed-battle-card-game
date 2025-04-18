@@ -1,4 +1,4 @@
-package roomManager_test
+package roomLists_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestRoomManager(t *testing.T) {
+func TestRoomLists(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "RoomManager Suite")
+	RunSpecs(t, "RoomLists Suite")
 }
