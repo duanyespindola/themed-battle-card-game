@@ -1,7 +1,7 @@
 package room
 
 import (
-	"fmt"
+	"slices"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/duanyespindola/themed-battle-card-game/back-in-go/player"
@@ -24,10 +24,10 @@ func (w *Room) Players() TRoomPlayers {
 }
 func (w *Room) AddPlayer(p *player.Player) error {
 	if w.playerInTheRoom(p) {
-		return fmt.Errorf("player already in the room")
+		return ErrorPlayerAlreadyInRoom
 	}
 	if w.status != StatusWaitingPlayer {
-		return fmt.Errorf("room status does not allow adding players")
+		return ErrorNotAllowedAddingPlayer
 	}
 
 	w.status = StatusWaitingMatch
@@ -58,7 +58,7 @@ func NewRoom(p *player.Player) *Room {
 
 func (room *Room) RemovePlayer(player_to_remove *player.Player) (*player.Player, error) {
 	if !room.playerInTheRoom(player_to_remove) {
-		return nil, fmt.Errorf("player not found in the room")
+		return nil, ErrorPlayerNotInRoom
 	}
 
 	var idx int //player index on the room.players array
@@ -69,7 +69,7 @@ func (room *Room) RemovePlayer(player_to_remove *player.Player) (*player.Player,
 	}
 
 	removed_player := room.players[idx]
-	room.players = append(room.players[:idx], room.players[idx+1:]...)
+	room.players = slices.Delete(room.players, idx, idx+1)
 
 	room.status = StatusWaitingPlayer
 
