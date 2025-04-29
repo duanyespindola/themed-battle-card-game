@@ -1,4 +1,4 @@
-package waitingRoom_test
+package room_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestWaitingRoom(t *testing.T) {
+func TestRoom(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "WaitingRoom Test Suite")
+	RunSpecs(t, "Room Test Suite")
 }
