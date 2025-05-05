@@ -47,7 +47,7 @@ var _ = Describe("Lists Unit Test", func() {
 
 			Expect(lists.listWaitingForPlayers).To(HaveLen(1))
 			Expect(lists.listWaitingForMatch).To(HaveLen(0))
-
+			Expect(lists.IsThereAnyRoomWaitingForPlayer()).To(Equal(mockRoom))
 			Expect(lists.listWaitingForPlayers).To(HaveKey(mockRoom.Id()))
 		})
 
@@ -104,6 +104,8 @@ var _ = Describe("Lists Unit Test", func() {
 
 	Describe("IsThereAnyRoomWaitingForPlayer", func() {
 		It("should return the oldest room in the list", func() {
+			Expect(lists.IsThereAnyRoomWaitingForPlayer()).To(BeNil())
+
 			mockRoom1, _ := roomMaker.NewRoom("room1", room.StatusWaitingPlayer, []player.IPlayer{player1})
 			lists.AddToLists(mockRoom1)
 
